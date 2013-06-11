@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-controller="AppCtrl">
+	<head>
+		<meta charset="utf-8" />
+		<SocketStream/>
+		<title>OpenSLAT Web Application</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<meta name="description" content="todo" />
+		<meta name="author" content="todo" />
+		<link rel="shortcut icon" href="ico/favicon.ico" />
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png" />
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png" />
+		<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png" />
+	</head>
+	<body>
+
+		<!--=================NAVBAR===================-->
+
+		<div ng-controller="NavCtrl" class="navbar navbar-static-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<!-- .btn-navbar is used as toggle for collapased content-->
+					<a href="#" data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<!-- leave brand out here if you want it shown
+					<a href="#" class="brand">Openslat</a>-->
+					<!-- everything in here hidden at 940px or less-->
+					<div class="nav-collapse navbar-responsive-collapse">
+						<ul class="nav">
+							<li ng-class="isActive('introduction')">
+								<a href="introduction" ng-class="{ on: isIntroduction }">Introduction</a>
+							</li>
+							<li ng-class="isActive('im')">
+								<a href="im" ng-class="{ on: isIm }">1. Seismic Hazard</a>
+							</li>
+							<li ng-class="isActive('edp')">
+								<a href="edp" ng-class="{ on: isEdp }">2. Seismic Response</a>
+							</li>
+							<li ng-class="isActive('structure')">
+								<a href="structure" ng-class="{ on: isStructure }">3. System Definition</a>
+							</li>
+							<li ng-class="isActive('collapse')">
+								<a href="collapse" ng-class="{ on: isCollapse }">4. Collapse and Demolition</a>
+							</li>
+							<li ng-class="isActive('results')">
+								<a href="results" ng-class="{ on: isOptions }">Calculate</a>
+							</li>
+						</ul>
+					</div>
+					<!-- Save and Load controls -->
+					<div ng-controller="SaveCtrl" class="pull-right" class="navbar navbar-static-top">
+						<!--<button type="button" class="btn btn-primary pull-right save-button" ng-click="loadJson()">Load saved data...</button>-->
+						
+						
+								<div class="fileupload fileupload-new pull-right save-button" data-provides="fileupload">
+									<span class="btn btn-file btn-primary">
+										<span class="fileupload-new">Load saved data...</span>
+										<span class="fileupload-exists">Load saved data...</span>
+										<input type="file" id="saveFileSelect" />
+									</span>
+								</div>
+						
+						<button type="button" class="btn btn-primary pull-right save-button" ng-click="saveJson()" ng-disabled="!dirty" >{{ dirty ? "Save work" : "Saved!" }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<!-- fluid container -->
+		<div id="content" ng-switch="path[0]" class="row-fluid">
+
+			<!--================INTRODUCTION PAGE============-->
+
+			<div ng-switch-when="introduction" class="container-semifluid" id="introPage">
+				<div class="page-header">
+					<h1>OpenSLAT <small>Introduction</small></h1>
+				</div>
+
+				<p>Welcome to OpenSLAT, an open-source tool for performing seismic loss assessment of structures subjected to earthquake risk. OpenSLAT is developed at the University of Canterbury by <a href="http://www.civil.canterbury.ac.nz/staff/bbradley.shtml">Brendon Bradley</a>, <a href="http://www.github.com/statX">Alan Williams</a> and <a href="http://www.joey.scarr.co.nz/">Joey Scarr</a>.</p>
+				
+				<p>OpenSLAT follows a linear process of data entry and computation. Above, you can see tabs corresponding to the four main input steps:</p>
+				
+				<dl>
+					<dt>Seismic Hazard</dt>
+					<dd>On this tab, you define the probability of seismic events of different magnitudes. You can define these using a parametric relationship, or from empirical data.</dd>
+				</dl>
+				<dl>
+					<dt>Seismic Response</dt>
+					<dd>On the second tab, you define a number of <i>Engineering Demand Parameters</i> (EDPs), and specify how each is affected by different levels of seismic activity. Again, this can be specified using parametric relationships, or by uploading a set of empirical data points.</dd>
+				</dl>
+				<dl>
+					<dt>System Definition</dt>
+					<dd>The System Definition tab allows you to define the components of your structure or system, and how they are affected by the Engineering Demand Parameters. Your projected damage costs will be determined by the costs of the components that make up your system.</dd>
+				</dl>
+				<dl>
+					<dt>Global Collapse</dt>
+					<dd>On the final tab, you define the probability and cost of a total structural collapse, as well as the probability that the structure will be damaged to the point that it requires demolition. These probabilities will be taken into account in your final cost estimates.</dd>
+				</dl>
+				
+				<p>Each tab contains detailed instructions on how to input your data.</p>
+				
+				<p>Once you have provided some input data, you can visit the <b>Calculate</b> tab at any time to see what computations are available to perform.</b></p>
+
+			</div>
+
+
+
+			<!--================IM PAGE===============-->
+
+			<div ng-switch-when="im" ng-controller="ImCtrl" class="container-semifluid" id="imPage">
+        <div class="page-header">
+          <h1>Seismic Hazard <small>How often do earthquakes of different intensities occur?</small></h1>
+        </div>
+
+        <div class="row-fluid">
+					<p>
+						In this section, you will define a relationship between earthquake <i>intensity</i>
+						and <i>annual rate of exceedance</i> (that is, how often a certain intensity is
+						likely to occur each year).
+					</p>
+          <p>
+            The intensity measure may be Peak Ground Acceleration, Spectral Acceleration,
+						or some other measure. The relationship may be defined parametrically, or by providing a set of
+            data-points in CSV or tab separated format.
+          </p>
+        </div>
+        <div class="row-fluid">
+          <h4>Define the intensity measure:</h4>
+        </div>
+				
+				<div class="row-fluid">
+					<div class="well well-small span12">
+						<input class="span12" type="text" ng-model="im.name" placeholder="Name and units of intensity measure, e.g. Peak Ground Acceleration (m/s^2)" />
+						<div>
+							<b>Relationship between {{ im.name || 'intensity' }} and rate of exceedance:</b>
+							<buttons-radio class="btn-group" data-toggle="buttons-radio" model="relationshipType" values='[PARAMETRIC, DISCRETE]' labels='["Parametric", "From data file(s)"]'></buttons-radio>
+						</div>
+						
+						<!-- Relationship panel -->
+						<div class="well well-small" style="margin-top:10px" ng-show="relationshipType != null">
+							<!-- Top section -->
+							<div ng-show="relationshipType == PARAMETRIC">
+								Type of relationship:
+								<select ng-model="parametricType">
+									<option value="PowerModel">Power</option>
+									<option value="HyperbolicModel">Hyperbolic</option>
+								</select>
+							</div>
+							<div ng-show="relationshipType == DISCRETE">
+								<div class="fileupload fileupload-new" data-provides="fileupload">
+									<span class="btn btn-file">
+										<span class="fileupload-new">Add new relationship from CSV file...</span>
+										<span class="fileupload-exists">Add new relationship from CSV file...</span>
+										<input type="file" id="imFileSelect" /></span>
+								</div>
+							</div>
+							
+							<div>
+								<hr/>
+								<!-- Chart -->
+								<div class="pull-right">
+									<chart id="intensitygraph" data="graphData" width="800px" height="500px"></chart>
+								</div>
+								<!-- Left section -->
+								<div ng-show="relationshipType == PARAMETRIC && parametricType == POWERMODEL">
+									<!-- Parametric, power model -->
+									<p>
+										<b>Formula:</b> <i>v[im] = k<sub>0</sub>IM<sup>-k</sup></i>
+									</p>
+									<div class="graph-param">
+										<div class="form-label"><i>k<sub>0</sub> = </i></div><input class="pull-right" type="text" ng-model="power_k0" />
+									</div>
+									<div class="graph-param">
+										<div class="form-label"><i>k = </i></div><input class="pull-right" type="text" ng-model="power_k" />
+									</div>
+								</div>
+								<div ng-show="relationshipType == PARAMETRIC && parametricType == HYPERBOLICMODEL">
+									<!-- Parametric, hyperbolic (Bradley) model -->
+									<p>
+										<b>Formula:</b> <i>v[im] = v<sub>asy</sub> </i>exp<i>[&alpha; / ln(im / IM<sub>asy</sub>)</sup>]</i>
+									</p>
+									<div class="graph-param">
+										<div class="form-label"><i>v<sub>asy</sub> = </i></div><input class="pull-right" type="text" ng-model="hyperbolic_vasy" />
+									</div>
+									<div class="graph-param">
+										<div class="form-label"><i>IM<sub>asy</sub> = </i></div><input class="pull-right" type="text" ng-model="hyperbolic_IMasy" />
+									</div>
+									<div class="graph-param">
+										<div class="form-label"><i>&alpha; = </i></div><input class="pull-right" type="text" ng-model="hyperbolic_alpha" />
+									</div>
+								</div>
+								<div ng-show="relationshipType == DISCRETE">
+									<!-- Discrete relationship (from file) -->
+									<div class="graph-discrete" ng-repeat="rel in discreteRelationships">
+										<b>[Relationship {{$index + 1}}]</b>
+										Weighting: <input type="text" ng-model="rel.epistemicWeight" />
+										<a href="#" class="close" ng-click="removeDiscreteRel($index)" style="float: none">&times;</a>
+										<p>{{ rel.name }}</p>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<div ng-show="relationshipType != null">
+							<table>
+								<tr>
+									<td width="170px"><b>IM output range:</b></td>
+									<td>
+										Min: <input class="numerical range" type="number" ng-model="im.minIMValue" />
+										Max: <input class="numerical range" type="number" ng-model="im.maxIMValue" />
+										Number of points:<input class="numerical range" type="number" ng-model="options.imCalcSteps" />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<!--================EDP PAGE===============-->
+		
+			<div ng-switch-when="edp" ng-controller="EdpCtrl" class="container-semifluid">
+				<div class="page-header">
+					<h1>Seismic Response <small>How does the structure respond?</small></h1>
+				</div>
+				<div class="row-fluid">
+					<p>A structure has various <i>Engineering Demand Parameters</i> (EDPs), such as storey
+					drift or acceleration, which change depending on the earthquake intensity.
+					</p>
+					<p>In this section, you should define the EDPs which will affect the different components of your structure.</p>
+				</div>
+				<div class="row-fluid">
+					<h4>Define a new Engineering Demand Parameter (EDP):</h4>
+				</div>
+				<div class="row-fluid">
+					<div class="well well-small span12">
+						<div ng-show="!im">
+							Error: Intensity measure undefined. Please complete the Seismic Hazard section first.
+						</div>
+						<div ng-show="!!im">
+							<input type="text" class="span12" ng-model="edpname" placeholder="Name and units of EDP, e.g. 2nd storey drift (%)" />
+							<div>
+								<b>Relationship between {{ edpname || 'EDP' }} and {{ im.name }}:</b>
+								<buttons-radio class="btn-group" data-toggle="buttons-radio" model="relationshipType" values='[PARAMETRIC, DISCRETE]' labels='["Parametric", "From data file(s)"]'></buttons-radio>
+							</div>
+							
+							<!-- Relationship panel -->
+							<div class="well well-small" style="margin-top:10px" ng-show="relationshipType != ''">
+								<!-- Top section -->
+								<!-- Discrete relationship -->
+								<div ng-show="relationshipType == DISCRETE">
+									<div class="fileupload fileupload-new" data-provides="fileupload">
+										<select ng-model="discreteInputFormat" style="width:400px;">
+											<option value="">-- Choose an input format --</option>
+											<option value="MeanDispersion">Mean/Dispersion (&lt;IM&gt;,&lt;EDP_Mean&gt;,&lt;EDP_SD&gt;)</option>
+											<option value="RawData">Raw measurements (&lt;IM&gt;,&lt;EDP_1&gt;,&lt;EDP_2&gt;,&lt;...&gt;)</option>
+										</select>
+										<span class="btn btn-file" ng-disabled="!discreteInputFormat">
+											<span class="fileupload-new">Import from CSV file...</span>
+											<span class="fileupload-exists">Import from CSV file...</span>
+											<input type="file" id="edpFileSelect" ng-show="!!discreteInputFormat" />
+										</span>
+									</div>
+								</div>
+								<!-- Parametric relationship -->
+								<div ng-show="relationshipType == PARAMETRIC">
+									<table class="twoparam">
+										<tr>
+											<td>
+												Mean parametric relationship:
+												<select ng-model="meanParametricType">
+													<option value="PowerModel">Power</option>
+													<option value="AslaniModel">Non-linear (Aslani 2005)</option>
+												</select>
+											</td>
+											<td>
+												Dispersion parametric relationship:
+												<select ng-model="sdParametricType">
+													<option value="PowerModel">Power</option>
+													<option value="ParabolicModel">Parabolic</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<!-- Mean parameters -->
+												<div ng-show="meanParametricType==POWERMODEL">
+													<p>
+														<b>Formula:</b> <i>&mu;<sub>EDP|IM</sub> = aIM<sup>b</sup></i>
+													</p>
+													<div class="graph-param">
+														<div class="form-label"><i>a = </i></div><input class="pull-right" type="text" ng-model="meanpower_a" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>b = </i></div><input class="pull-right" type="text" ng-model="meanpower_b" />
+													</div>
+												</div>
+												<div ng-show="meanParametricType==ASLANIMODEL">
+													<p>
+														<b>Formula:</b> <i>&mu;<sub>EDP|IM</sub> = &alpha;<sub>1</sub> (&alpha;<sub>2</sub>)<sup>IM</sup> [IM]<sup>&alpha;<sub>3</sub></sup></i>
+													</p>
+													<div class="graph-param">
+														<div class="form-label"><i>&alpha;<sub>1</sub> = </i></div><input class="pull-right" type="text" ng-model="meanaslani_a1" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>&alpha;<sub>2</sub> = </i></div><input class="pull-right" type="text" ng-model="meanaslani_a2" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>&alpha;<sub>3</sub> = </i></div><input class="pull-right" type="text" ng-model="meanaslani_a3" />
+													</div>
+												</div>
+											</td>
+											<td>
+												<!-- Dispersion parameters -->
+												<div ng-show="sdParametricType==POWERMODEL">
+													<p>
+														<b>Formula:</b> <i>&sigma;</i><sub>ln<i>EDP|IM</i></sub><i> = aIM<sup>b</sup></i>
+													</p>
+													<div class="graph-param">
+														<div class="form-label"><i>a = </i></div><input class="pull-right" type="text" ng-model="sdpower_a" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>b = </i></div><input class="pull-right" type="text" ng-model="sdpower_b" />
+													</div>
+												</div>
+												<div ng-show="sdParametricType==PARABOLICMODEL">
+													<p>
+														<b>Formula:</b> <i>&sigma;</i><sub>ln<i>EDP|IM</i></sub><i> = &beta;<sub>1</sub> + &beta;<sub>2</sub>(IM) + &beta;<sub>3</sub>(IM)<sup>2</sup></i>
+													</p>
+													<div class="graph-param">
+														<div class="form-label"><i>&beta;<sub>1</sub> = </i></div><input class="pull-right" type="text" ng-model="sdparabolic_b1" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>&beta;<sub>2</sub> = </i></div><input class="pull-right" type="text" ng-model="sdparabolic_b2" />
+													</div>
+													<div class="graph-param">
+														<div class="form-label"><i>&beta;<sub>3</sub> = </i></div><input class="pull-right" type="text" ng-model="sdparabolic_b3" />
+													</div>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+								<hr/>
+								<!-- Chart goes here -->
+								<table width="100%">
+									<tr>
+										<td><chart id="newEdpGraph" data="newEdpGraphData" scale="linear" width="800px" height="500px"></chart></td>
+										<td class="data" ng-show="!!extraPoints">
+											<h4>Calculated values:</h4>
+											<table class="data">
+												<tr>
+													<th>IM</th>
+													<th><i>&mu;<sub>EDP|IM</sub></i></th>
+													<th><i>&sigma;</i><sub>ln<i>EDP|IM</i></sub></th>
+												</tr>
+												<tr ng-repeat="datum in discreteData">
+													<td>{{ datum[0].toFixed(5) }}</td>
+													<td>{{ datum[1].toFixed(5) }}</td>
+													<td>{{ datum[2].toFixed(5) }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								
+								<!-- Output range stuff -->
+								<table>
+									<tr>
+										<td width="170px"><b>EDP output range:</b></td>
+										<td>
+											Min: <input class="numerical range" type="number" ng-model="minEDPValue" />
+											Max: <input class="numerical range" type="number" ng-model="maxEDPValue" />
+											Number of points:<input class="numerical range" type="number" ng-model="options.edpCalcSteps" />
+										</td>
+									</tr>
+								</table>
+							</div>
+							<input class="btn btn-primary pull-right" type="button" ng-click="addEdp()" ng-disabled="!newEdpValid()" value="Save Engineering Demand Parameter" />
+						</div>
+					</div>
+				</div>
+				
+				<div class="row-fluid">
+					<h4>Existing EDPs:</h4>
+				</div>
+				<!-- List of EDPs goes in this panel -->
+				<div class="row-fluid" ng-show="!!im && edps.length > 0">
+					<div class="well well-small span12">
+						<table class="components">
+							<tr class="comp-header">
+								<th width="80px">ID</th>
+								<th>EDP Name</th>
+								<th>Plot?</th>
+								<th width="100px"></th>
+							</tr>
+							<tr ng-repeat="edp in edps">
+								<td>{{edp.identifier}}</td>
+								<td>{{edp.name}}</td>
+								<td>X</td>
+								<td><a href="#" ng-click="editEdp(edp)">Edit</a> | <a href="#" ng-click="deleteEdpConfirm(edp)">Delete</a></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		
+			<!--================SYSTEM DEFINITION PAGE===============-->
+
+			<div ng-switch-when="structure" ng-controller="StructureCtrl" class="container-semifluid">
+				<div class="page-header">
+					<h1>System Definition <small>What components is the structure made of?</small></h1>
+				</div>
+				<div class="row-fluid">
+					<p class="span6">Define your structure by adding component types and quantities.
+					</p>
+				</div>
+				<div class="row-fluid">
+					<form name="pgroupform" ng-submit="addPGroup()">
+						<div class="well well-small">
+							<div ng-show="!edps">
+								Error: No engineering demand parameters found. Please complete the Structural Response section first.
+							</div>
+							<table style="width:100%" ng-show="!!edps">
+								<tr>
+									<td>
+										<input class="span10" type="text" ng-model="pgroupName" placeholder="Component group name (e.g., 2nd storey RC beam-column joints)" />
+										<input class="span2 pull-right" type="number" ng-model="pgroupQuantity" min="1" value="1" placeholder="Quantity" />
+										<div class="form-label">
+											Component type:
+										</div>
+										<select class="span9 pull-right" ng-model="pgroupFF" ng-options="fragFunc.identifier as fragFunc.name for fragFunc in ff"></select>
+									</td>
+								</tr>
+								<tr ng-show="pgroupFF == 0">
+									<td>
+										<div class="well well-small">
+											<!-- Internal form for creating custom component types (fragility functions) -->
+											<innerform ng-form name="fragilityform" ng-submit="addCustomFf()">
+												<h4>Create Custom Component Type</h4>
+												<table width="100%">
+												<tr>
+													<td>
+														<input class="span12" type="text" ng-model="customFfName" placeholder="Name of new component type" />
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<h5>Damage states:</h5>
+														<div class="well well-small">
+															TODO: Add new damage state here
+														</div>
+														<div ng-repeat="ds in damagestates" class="well well-small">
+															Mean = {{ds.meanEDPOnset}}, Std. Dev. = {{ds.sigmaEDPOnset}}
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<input class="btn btn-primary pull-right" type="button" ng-click="addCustomFf()" ng-disabled="!ffFormValid()" value="Save and Use Custom Component Type" />
+													</td>
+												</tr>
+												</table>
+											</innerform>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="form-label">
+											Component damage depends on:
+										</div>
+										<select class="span9 pull-right" ng-model="pgroupEDP" ng-options="edp.identifier as edp.name for edp in edps">
+											<option value="">-- Choose the related EDP --</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input class="btn btn-primary pull-right" type="submit" ng-disabled="!pgroupFormValid()" value="Add New Component" />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</form>
+				</div>
+				<h4 ng-show="!!edps">Components:</h4>
+				<div class="row-fluid" ng-show="!!edps">
+					<div class="well well-small">
+						<table class="components">
+							<tr class="comp-header">
+								<th width="80px">Quantity</th>
+								<th>Name</th>
+								<th>Component Type</th>
+								<th>Depends on</th>
+								<th width="100px"></th>
+							</tr>
+							<tr ng-repeat="item in pgroups">
+								<td>{{item.quantity}}</td>
+								<td>{{item.name}}</td>
+								<td>{{getFFName(item.ff)}}</td>
+								<td>{{getEdpName(item.edp)}}</td>
+								<td><a href="#" ng-click="editPGroup(item)">Edit</a> | <a href="#" ng-click="deletePGroupConfirm(item)">Delete</a></td>
+							</tr>
+						</table>
+					</div>
+					
+					<!--div ng-repeat="item in pgroups">
+						<div>
+							<div class="well well-small">
+								<div class="pull-left">{{item.quantity}} &times; <b>{{item.name}}</b></div>
+								<div class="pull-right">
+									<a href="#" ng-click="editPGroup(item)">Edit</a> | <a href="#" ng-click="deletePGroupConfirm(item)">Delete</a>
+								</div>
+							</div>
+						</div>
+					</div-->
+				</div>
+			</div>
+		
+			<!--================GLOBAL COLLAPSE PAGE===============-->
+
+			<div ng-switch-when="collapse" ng-controller="CollapseCtrl" class="container-semifluid">
+				<div class="page-header">
+          <h1>Collapse and Demolition <small>What is the probability of a building collapse?</small></h1>
+        </div>
+
+        <div class="row-fluid">
+          <p>
+            In this section, you will define the probability that the building will collapse
+						(or require demolition) in relation to the <i>intensity measure</i> defined in the
+						Seismic Hazard section, as well as the cost in case of a collapse.
+          </p>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="well well-small span12">
+						<div ng-show="!im">
+							Error: Intensity measure undefined. Please complete the Seismic Hazard section first.
+						</div>
+						<div ng-show="!!im">
+							<b>Relationship between global collapse and {{ im.name }}: </b>
+							<buttons-radio class="btn-group" data-toggle="buttons-radio" model="relationshipType" values='[PARAMETRIC, DISCRETE]' labels='["Parametric", "From data file(s)"]'></buttons-radio>
+						</div>
+						
+						<!-- Relationship panel -->
+						<div class="well well-small" style="margin-top:10px" ng-show="!!im && relationshipType != null">
+							<!-- Top section -->
+							<table class="collapsedemoinput twoparam">
+								<tr>
+									<td>
+										<div ng-show="relationshipType == PARAMETRIC">
+											{{im.name}} at which <b>demolition</b> is required: <br />
+											Mean: <input class="numerical param" type="text" ng-model="demolition_mean" />
+											Log-normal SD: <input class="numerical param" type="text" ng-model="demolition_sd" />
+											<input class="btn btn-primary" type="button" ng-click="addDemolitionRelationship()" ng-disabled="!demolitionFormValid()" value="Add Relationship" />
+										</div>
+										<div ng-show="relationshipType == DISCRETE">
+											<div class="fileupload fileupload-new" data-provides="fileupload">
+												<span class="btn btn-file">
+													<span class="fileupload-new">Add new relationship from CSV file...</span>
+													<span class="fileupload-exists">Add new relationship from CSV file...</span>
+													<input type="file" id="demoFileSelect" />
+												</span>
+											</div>
+										</div>
+									</td>
+									<td>
+										<div ng-show="relationshipType == PARAMETRIC">
+											{{im.name}} at which <b>collapse</b> occurs: <br />
+											Mean: <input class="numerical param" type="text" ng-model="collapse_mean" />
+											Log-normal SD: <input class="numerical param" type="text" ng-model="collapse_sd" />
+											<input class="btn btn-primary" type="button" ng-click="addCollapseRelationship()" ng-disabled="!collapseFormValid()" value="Add Relationship" />
+										</div>
+										<div ng-show="relationshipType == DISCRETE">
+											<div class="fileupload fileupload-new" data-provides="fileupload">
+												<span class="btn btn-file">
+													<span class="fileupload-new">Add new relationship from CSV file...</span>
+													<span class="fileupload-exists">Add new relationship from CSV file...</span>
+													<input type="file" id="collapseFileSelect" />
+												</span>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+							
+							<div>
+								<hr/>
+								<!-- Chart -->
+								<div class="pull-right">
+									<chart id="collapsegraph" data="graphData" scale="linear" width="800px" height="500px"></chart>
+								</div>
+								<div>
+									<h4>Demolition relationships:</h4>
+									<!-- Demolition relationships -->
+									<div class="graph-collapse" ng-repeat="rel in demolitionRelationships">
+										<b>[Relationship {{$index + 1}}]</b>
+										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
+										<a href="#" class="close" ng-click="removeDemolitionRel($index)" style="float: none">&times;</a>
+									</div>
+									<hr />
+									<h4>Collapse relationships:</h4>
+									<!-- Demolition relationships -->
+									<div class="graph-collapse" ng-repeat="rel in collapseRelationships">
+										<b>[Relationship {{$index + 1}}]</b>
+										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
+										<a href="#" class="close" ng-click="removeCollapseRel($index)" style="float: none">&times;</a>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Cost of demolition panel -->
+				<div class="row-fluid" ng-show="!!im">
+					<div class="well well-small span12">
+						<div>
+							<h4 style="display:inline-block">Cost of demolition:</h4>
+							<buttons-radio class="btn-group" data-toggle="buttons-radio" model="demoCollapse.demoLoss.type" values='[AUTOMATIC, MANUAL]' labels='["Automatic", "Manual"]'></buttons-radio>
+							<!--div class="btn-group" data-toggle="buttons-radio">
+								<button type="button" class="btn btn-secondary" ng-click="demoCollapse.demoLoss.type = AUTOMATIC">Automatic</button>
+								<button type="button" class="btn btn-secondary" ng-click="demoCollapse.demoLoss.type = MANUAL">Manual</button>
+							</div-->
+							<div ng-show="demoCollapse.demoLoss.type == AUTOMATIC">
+								<p>Total loss due to demolition will be calculated as the sum of the components defined on the Components tab, plus additional costs defined below:</p>
+								<p>
+									Additional costs (e.g. due to re-design and demolition): <span style="font-size: ">$<input type="text" class="numerical cost" ng-model="demoCollapse.demoLoss.extra" placeholder="0" />
+								</span></p>
+							</div>
+							<div ng-show="demoCollapse.demoLoss.type == MANUAL">
+								<p>Total loss due to demolition will be calculated using the relationship defined below:</p>
+								<div>
+								Mean: $<input type="text" class="numerical cost" ng-model="demoCollapse.demoLoss.mean" placeholder="0" /></div>
+								<div>
+								Aleatory uncertainty: <input type="text" class="numerical cost" ng-model="demoCollapse.demoLoss.sd" placeholder="0" /></div>
+								<div>
+								Epistemic uncertainty: <input type="text" class="numerical cost" ng-model="demoCollapse.demoLoss.epistemicUncertainty" placeholder="0" /></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Cost of collapse panel -->
+				<div class="row-fluid" ng-show="!!im">
+					<div class="well well-small span12">
+						<div>
+							<h4 style="display:inline-block">Cost of collapse:</h4>
+							<buttons-radio class="btn-group" data-toggle="buttons-radio" model="demoCollapse.collapseLoss.type" values='[AUTOMATIC, MANUAL]' labels='["Automatic", "Manual"]'></buttons-radio>
+							<div ng-show="demoCollapse.collapseLoss.type == AUTOMATIC">
+								<p>Total loss due to collapse will be calculated as the sum of the components defined on the Components tab, plus additional costs defined below:</p>
+								<p>
+									Additional costs (e.g. due to re-design and demolition): <span style="font-size: ">$<input type="text" class="numerical cost" ng-model="demoCollapse.collapseLoss.extra" placeholder="0" />
+								</span></p>
+							</div>
+							<div ng-show="demoCollapse.collapseLoss.type == MANUAL">
+								<p>Total loss due to demolition will be calculated using the relationship defined below:</p>
+								<div>
+								Mean: $<input type="text" class="numerical cost" ng-model="demoCollapse.collapseLoss.mean" placeholder="0" /></div>
+								<div>
+								Aleatory uncertainty: <input type="text" class="numerical cost" ng-model="demoCollapse.collapseLoss.sd" placeholder="0" /></div>
+								<div>
+								Epistemic uncertainty: <input type="text" class="numerical cost" ng-model="demoCollapse.collapseLoss.epistemicUncertainty" placeholder="0" /></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		
+			<!--================FRAGILITY FUNCTION PAGE===============-->
+
+			<div ng-switch-when="ff" ng-controller="FfCtrl" class="container-fluid">
+					 <h2>Fragility Function Library</h2>
+
+					<p>Sourced from an HTTP/REST api endpoint which delivers a json file on the
+							server</p>
+					<p>Filter using description:
+							<input type="text" ng-model="filterText" />
+					</p>
+					<div ng-repeat="item in ff|filter:textMatch">
+							<div style="background-color:#e5e5ff">
+									 <h5>Fragility Function number: {{item.identifier}}</h5>
+									<p>Description: {{item.name}}</p>
+							</div>
+					</div>
+			</div>
+			
+			<!--================RESULTS PAGE============-->
+			
+			<div ng-switch-when="results" ng-controller="ResultsCtrl" class="container-semifluid" id="resultsPage">
+				<div class="page-header">
+					<h1>Calculate <small>Compute and display your results.</small></h1>
+				</div>
+				
+				<p>In this section, you can choose which relationships to calculate based on the input data you supplied.</p>
+				
+				<p>Currently available relationships are:</p>
+				<div class="checkboxes">
+					<label>
+						<input type="checkbox" id="calcDemoHazard" ng-disabled="demoHazardAvailable() != ''" ng-model="options.demolitionRateCalc" />
+						<span ng-class="{disabled: demoHazardAvailable() != ''}">Annual probability of demolition, &lambda;<sub>D</sub> <span class="error">{{demoHazardAvailable()}}</span></span>
+					</label>
+					<label>
+						<input type="checkbox" id="calcCollapseHazard" ng-disabled="collapseHazardAvailable() != ''" ng-model="options.collapseRateCalc" />
+						<span ng-class="{disabled: collapseHazardAvailable() != ''}">Annual probability of collapse, &lambda;<sub>C</sub> <span class="error">{{collapseHazardAvailable()}}</span></span>
+					</label>
+					<label>
+						<input type="checkbox" id="calcEdpHazard" ng-disabled="edpHazardAvailable() != ''" ng-model="options.edpRateCalc" />
+						<span ng-class="{disabled: edpHazardAvailable() != ''}">Annual probability of EDP exceedance, &lambda;<sub>EDP</sub> <span class="error">{{edpHazardAvailable()}}</span></span>
+					</label>
+				</div>
+				
+				<!-- DEMOLITION HAZARD PANE -->
+				<div class="row-fluid" ng-show="options.demolitionRateCalc">
+					<div class="well well-small span12">
+						<h4>&lambda;<sub>D</sub>: Annual probability of demolition</h4>
+						<div ng-show="calculationStatus != REQUEST_PENDING">
+							<!-- Calculation options go here -->
+						</div>
+						<div ng-show="calculationStatus == REQUEST_PENDING">
+							<img src="images/ajax-loader.gif"/> <h5 style="display:inline-block">Calculating, please wait...</h5>
+						</div>
+						<div ng-show="calculationStatus == REQUEST_COMPLETE">
+							&lambda;<sub>D</sub> = {{ results.demolitionRate }}
+							<!--chart id="demoHazard" data="demoHazardGraphData" width="800px" height="500px"></chart-->
+						</div>
+					</div>
+				</div>
+				
+				<!-- COLLAPSE HAZARD PANE -->
+				<div class="row-fluid" ng-show="options.collapseRateCalc">
+					<div class="well well-small span12">
+						<h4>&lambda;<sub>C</sub>: Annual probability of collapse</h4>
+						<div ng-show="calculationStatus != REQUEST_PENDING">
+							<!-- Calculation options go here -->
+						</div>
+						<div ng-show="calculationStatus == REQUEST_PENDING">
+							<img src="images/ajax-loader.gif"/> <h5 style="display:inline-block">Calculating, please wait...</h5>
+						</div>
+						<div ng-show="calculationStatus == REQUEST_COMPLETE">
+							&lambda;<sub>C</sub> = {{ results.collapseRate }}
+							<!--chart id="collapseHazard" data="collapseHazardGraphData" width="800px" height="500px"></chart-->
+						</div>
+					</div>
+				</div>
+				
+				<!-- EDP HAZARD PANE -->
+				<div class="row-fluid" ng-show="options.edpRateCalc">
+					<div class="well well-small span12">
+						<h4>&lambda;<sub>EDP</sub>: Annual probability of EDP exceedance</h4>
+						<div ng-show="calculationStatus != REQUEST_PENDING">
+							<!-- Calculation options go here -->
+						</div>
+						<div ng-show="calculationStatus == REQUEST_PENDING">
+							<img src="images/ajax-loader.gif"/> <h5 style="display:inline-block">Calculating, please wait...</h5>
+						</div>
+						<div ng-show="calculationStatus == REQUEST_COMPLETE">
+							<table>
+								<tr>
+									<td style="vertical-align:top">
+										<div class="checkboxes">
+											<label ng-repeat="line in availableEdpLines">
+												<input type="checkbox" id="calcEDP{{ edp.identifier }}" ng-model="line.plot" ng-click="updateEdpChart()" />
+												<span>{{ line.name }}</span>
+											</label>
+										</div>
+									</td>
+									<td>
+										<chart id="edpHazard" data="edpHazardGraphData" width="800px" height="500px" style="float:right"></chart>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row-fluid" ng-show="!!im">
+					<input class="btn btn-primary pull-right" type="button" ng-click="calculate()" ng-disabled="!calculationValid()" value="Calculate" />
+				</div>
+				
+				<!-- JSON debug output -->
+				<div class="row-fluid" ng-show="!!im">
+					<p>
+					Sending to the server:
+					<pre class="prettyprint">{{ inputJson() }}</pre>
+					</p>
+					<p>
+					Receiving from the server:
+					<pre class="prettyprint">{{ outputJson }}</pre>
+					</p>
+				</div>
+			</div>
+		</div>
+	
+		<!-- bootstrap modal pops up when websocket connection is lost-->
+
+		<div id="warning" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Connection Lost!</h3>
+			</div>
+			<div class="modal-body">
+				<p>The connection to the server has been lost.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			</div>
+		</div>
+
+		<!-- needed to initialize the carousel transition -->
+		
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('.carousel').carousel({
+					interval: 8000
+				});
+				$('.splashCarousel').carousel('cycle');
+			});
+		</script>	
+	</body>
+</html>

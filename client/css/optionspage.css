@@ -1,0 +1,44 @@
+
+.custom-accordion-title {
+  color: #000000;
+}
+
+.custom-accordion-title:hover {
+  color: #0088cc;
+}
+
+#optionsPage .options-control {
+  margin: 0 0 10px;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+#optionsPage .options-control .accordion-toggle {
+  display: block;
+  padding: 8px 15px;
+}
+
+#optionsPage .options {
+  
+}
+
+#optionsPage .options-group {
+  margin: 10px 0 0;
+  list-style: none;
+  border: 1px solid #f5f5f5;
+  background-color: #f5f5f5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+#optionsPage .options-heading {
+  padding: 8px 15px;
+}
+
+#optionsPage .options-inner {
+  padding: 8px 15px;
+  background-color: #FFFFFF;
+}

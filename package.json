@@ -1,0 +1,14 @@
+{
+  "name": "Openslat",
+  "description": "Openslat",
+  "version": "0.0.1",
+  "author": "Alan Williams",
+  "private": true,
+  "engines": { "node": ">= 0.8.0" },
+  "dependencies": {
+    "socketstream": ">= 0.3.x",
+    "express": ">= 3.0.0"
+  },
+  "devDependencies": {
+  }
+}

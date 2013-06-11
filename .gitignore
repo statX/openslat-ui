@@ -1,0 +1,12 @@
+node_modules/
+*.exe 
+*.swp
+.DS_Store
+.svn
+.Spotlight-V100
+.Trashes
+Thumbs.db 
+*.jpg
+.nodemonignore
+*.komodoproject
+*.jar

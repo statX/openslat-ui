@@ -1,0 +1,125 @@
+/*!
+ * Useful CSS for building forms.
+ * Author: Joey Scarr
+ */
+
+.form-label {
+	float:left;
+	margin:6px 10px 0 0;
+}
+
+.graph-param {
+	width:250px;
+	height:40px;
+	margin-left:10px;
+}
+
+.graph-param > input {
+	width: 180px;
+}
+
+.graph-discrete {
+	width:250px;
+	height:80px;
+	margin-left:10px;
+}
+
+.graph-discrete > input {
+	width: 30px;
+}
+
+hr {
+	margin:5px 0 10px 0;
+	border-top: 1px solid #e3e3e3;
+}
+
+table.components {
+	width:100%;
+}
+
+table.components th {
+	text-align:left;
+}
+
+table.components .comp-header {
+	border-bottom: 1px solid silver;
+}
+
+table.twoparam {
+	width:100%;
+}
+
+table.collapsedemoinput input.param {
+	width:60px;
+}
+
+.graph-collapse {
+	width:250px;
+	height:40px;
+	margin-left:10px;
+}
+
+.graph-collapse > input {
+	width: 30px;
+}
+
+input.numerical {
+	height:16px;
+	line-height:16px;
+	padding: 4px 4px;
+	margin-bottom: 3px;
+}
+
+input.range {
+	width:60px;
+	margin-right:10px;
+	margin-left: 5px;
+}
+
+input.cost {
+	width:120px;
+}
+
+.checkboxes {
+	margin-bottom:30px;
+}
+
+.checkboxes label {
+	display: block;
+	padding-right: 10px;
+	white-space: nowrap;
+	margin-left:20px;
+}
+
+.checkboxes input {
+	margin-top:0;
+  vertical-align: middle;
+}
+
+.checkboxes label span {
+  vertical-align: middle;
+}
+
+span.disabled {
+	color: silver;
+}
+
+span.error {
+	color: red;
+}
+
+.fileupload select {
+	margin-bottom: 0;
+}
+
+table.data {
+	border: 1px solid gray;
+}
+
+table.data td {
+	padding:1px 10px;
+}
+
+td.data {
+	vertical-align: top;
+}

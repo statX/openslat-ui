@@ -1,0 +1,43 @@
+Things to add integration tests for:
+
+IM page:
+On initial load, stuff is hidden
+When a relationship type is chosen, panel appears
+No graph appears until a relationship has been filled in properly
+Changing the IM name updates the graph
+Test parametric and discrete stuff
+
+
+EDP page:
+Not available unless IM filled in and valid
+On initial load, stuff is hidden
+When a relationship type is chosen, panel appears
+No graph appears until a relationship has been filled in properly
+Changing the IM name updates the graph
+Changing the EDP updates the graph
+Saving the EDP works, clears all fields, shows up in list
+Editing the EDP restores all fields
+Saving the EDP again gives same saved result as previous EDP
+Test parametric and both discrete formats
+
+
+System definition:
+Not available unless at least one EDP defined
+Saving the component works, clears all fields, shows up in list
+Editing the component restores all fields
+Saving the component again gives same saved result as previous component
+
+
+Collapse/demo page:
+Not available unless IM filled in and valid
+On initial load, stuff is hidden
+When a relationship type is chosen, panel appears
+No graph appears until a relationship has been filled in properly
+Changing the IM name updates the graph
+
+
+Calculation page:
+...
+
+
+Make sure nothing causes errors
