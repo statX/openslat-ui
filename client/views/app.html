@@ -52,17 +52,13 @@
 					</div>
 					<!-- Save and Load controls -->
 					<div ng-controller="SaveCtrl" class="pull-right" class="navbar navbar-static-top">
-						<!--<button type="button" class="btn btn-primary pull-right save-button" ng-click="loadJson()">Load saved data...</button>-->
-						
-						
-								<div class="fileupload fileupload-new pull-right save-button" data-provides="fileupload">
-									<span class="btn btn-file btn-primary">
-										<span class="fileupload-new">Load saved data...</span>
-										<span class="fileupload-exists">Load saved data...</span>
-										<input type="file" id="saveFileSelect" />
-									</span>
-								</div>
-						
+							<div class="fileupload fileupload-new pull-right save-button" data-provides="fileupload">
+								<span class="btn btn-file btn-primary">
+									<span class="fileupload-new">Load saved data...</span>
+									<span class="fileupload-exists">Load saved data...</span>
+									<input type="file" id="saveFileSelect" />
+								</span>
+							</div>
 						<button type="button" class="btn btn-primary pull-right save-button" ng-click="saveJson()" ng-disabled="!dirty" >{{ dirty ? "Save work" : "Saved!" }}</button>
 					</div>
 				</div>
