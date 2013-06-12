@@ -123,3 +123,7 @@ table.data td {
 td.data {
 	vertical-align: top;
 }
+
+.edit-delete:hover {
+  cursor: pointer;
+}

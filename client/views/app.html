@@ -193,7 +193,7 @@
 									<div class="graph-discrete" ng-repeat="rel in discreteRelationships">
 										<b>[Relationship {{$index + 1}}]</b>
 										Weighting: <input type="text" ng-model="rel.epistemicWeight" />
-										<a href="#" class="close" ng-click="removeDiscreteRel($index)" style="float: none">&times;</a>
+										<a class="close" ng-click="removeDiscreteRel($index)" style="float: none">&times;</a>
 										<p>{{ rel.name }}</p>
 									</div>
 								</div>
@@ -397,7 +397,7 @@
 								<td>{{edp.identifier}}</td>
 								<td>{{edp.name}}</td>
 								<td>X</td>
-								<td><a href="#" ng-click="editEdp(edp)">Edit</a> | <a href="#" ng-click="deleteEdpConfirm(edp)">Delete</a></td>
+								<td><a class="edit-delete" ng-click="editEdp(edp)">Edit</a> | <a class="edit-delete" ng-click="deleteEdpConfirm(edp)">Delete</a></td>
 							</tr>
 						</table>
 					</div>
@@ -499,21 +499,10 @@
 								<td>{{item.name}}</td>
 								<td>{{getFFName(item.ff)}}</td>
 								<td>{{getEdpName(item.edp)}}</td>
-								<td><a href="#" ng-click="editPGroup(item)">Edit</a> | <a href="#" ng-click="deletePGroupConfirm(item)">Delete</a></td>
+								<td><a class="edit-delete" ng-click="editPGroup(item)">Edit</a> | <a class="edit-delete" ng-click="deletePGroupConfirm(item)">Delete</a></td>
 							</tr>
 						</table>
 					</div>
-					
-					<!--div ng-repeat="item in pgroups">
-						<div>
-							<div class="well well-small">
-								<div class="pull-left">{{item.quantity}} &times; <b>{{item.name}}</b></div>
-								<div class="pull-right">
-									<a href="#" ng-click="editPGroup(item)">Edit</a> | <a href="#" ng-click="deletePGroupConfirm(item)">Delete</a>
-								</div>
-							</div>
-						</div>
-					</div-->
 				</div>
 			</div>
 		
@@ -596,7 +585,7 @@
 									<div class="graph-collapse" ng-repeat="rel in demolitionRelationships">
 										<b>[Relationship {{$index + 1}}]</b>
 										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
-										<a href="#" class="close" ng-click="removeDemolitionRel($index)" style="float: none">&times;</a>
+										<a class="close" ng-click="removeDemolitionRel($index)" style="float: none">&times;</a>
 									</div>
 									<hr />
 									<h4>Collapse relationships:</h4>
@@ -604,7 +593,7 @@
 									<div class="graph-collapse" ng-repeat="rel in collapseRelationships">
 										<b>[Relationship {{$index + 1}}]</b>
 										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
-										<a href="#" class="close" ng-click="removeCollapseRel($index)" style="float: none">&times;</a>
+										<a class="close" ng-click="removeCollapseRel($index)" style="float: none">&times;</a>
 									</div>
 								</div>
 								<div class="clearfix"></div>
