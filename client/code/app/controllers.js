@@ -35,7 +35,8 @@ module.exports = function(ngModule) {
 	}]);
 
 	// SaveCtrl - handles saving and loading the JSON data
-	ngModule.controller('SaveCtrl', ['$scope', '$timeout', 'inputService', function($scope, $timeout, inputService) {
+	ngModule.controller('SaveCtrl', ['$scope', '$timeout', 'inputService', '$location',
+																	 function($scope, $timeout, inputService, $location) {
 		
 		$scope.dirty = true;
 		$scope.oldJSON = inputService.getJSONCopy();
@@ -73,6 +74,7 @@ module.exports = function(ngModule) {
 						$scope.$apply(function($scope) {
 							try {
 								inputService.setJSON(e.target.result);
+								$scope.oldJSON = inputService.getJSONCopy();
 								
 								$scope.dirty = false;
 								
@@ -84,6 +86,9 @@ module.exports = function(ngModule) {
 								oldInput.parentNode.replaceChild(newInput, oldInput);
 								// Listen for changes on the new node
 								document.getElementById('saveFileSelect').addEventListener('change', $scope.handleFileSelect);
+								
+								// Now refresh the page.
+								$location.path('/#');
 							} catch (err) {
 								alert("Error: Invalid file format.");
 							}
