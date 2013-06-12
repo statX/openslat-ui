@@ -1,5 +1,5 @@
 node_modules/
-*.exe 
+*.exe
 *.swp
 .DS_Store
 .svn
