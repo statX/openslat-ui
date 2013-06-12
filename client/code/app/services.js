@@ -75,23 +75,23 @@ angular.module('app.services', []).
 			"demoCollapse": {
 				"demoRelationships": [
 					{
-						"name":"relationship-1",
+						"name":"Mean: 1, Log-normal SD: 0.4",
 						"epistemicWeight":1,
 						"model":{
 							"type":"LogNormalModel",
 							"mean":1,
-							"sd":0.1
+							"sd":0.4
 						}
 					}
 				],
 				"collapseRelationships": [
 					{
-						"name":"relationship-2",
+						"name":"Mean: 2, Log-normal SD: 0.4",
 						"epistemicWeight":1,
 						"model":{
 							"type":"LogNormalModel",
 							"mean":2,
-							"sd":0.1
+							"sd":0.4
 						}
 					}
 				],

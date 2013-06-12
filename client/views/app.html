@@ -583,15 +583,15 @@
 									<h4>Demolition relationships:</h4>
 									<!-- Demolition relationships -->
 									<div class="graph-collapse" ng-repeat="rel in demolitionRelationships">
-										<b>[Relationship {{$index + 1}}]</b>
+										<b>[{{rel.name}}]</b>
 										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
 										<a class="close" ng-click="removeDemolitionRel($index)" style="float: none">&times;</a>
 									</div>
 									<hr />
 									<h4>Collapse relationships:</h4>
-									<!-- Demolition relationships -->
+									<!-- Collapse relationships -->
 									<div class="graph-collapse" ng-repeat="rel in collapseRelationships">
-										<b>[Relationship {{$index + 1}}]</b>
+										<b>[{{rel.name}}]</b>
 										Weighting: <input type="text" class="numerical" ng-model="rel.epistemicWeight" />
 										<a class="close" ng-click="removeCollapseRel($index)" style="float: none">&times;</a>
 									</div>

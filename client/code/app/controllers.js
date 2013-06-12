@@ -953,7 +953,7 @@ module.exports = function(ngModule) {
 		
 		$scope.addDemolitionRelationship = function() {
 			$scope.demolitionRelationships.push({
-				name: 'Demolition Relationship',
+				name: 'Mean: ' + $scope.demolition_mean + ', Log-normal SD: ' + $scope.demolition_sd,
 				epistemicWeight: 1.0,
 				model: {
 					type: $scope.PARAMETRIC,
@@ -971,7 +971,7 @@ module.exports = function(ngModule) {
 		
 		$scope.addCollapseRelationship = function() {
 			$scope.collapseRelationships.push({
-				name: 'Collapse Relationship',
+				name: 'Mean: ' + $scope.collapse_mean + ', Log-normal SD: ' + $scope.collapse_sd,
 				epistemicWeight: 1.0,
 				model: {
 					type: $scope.PARAMETRIC,

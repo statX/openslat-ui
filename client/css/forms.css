@@ -55,8 +55,8 @@ table.collapsedemoinput input.param {
 
 .graph-collapse {
 	width:250px;
-	height:40px;
 	margin-left:10px;
+	margin-bottom:10px;
 }
 
 .graph-collapse > input {
