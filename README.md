@@ -5,9 +5,10 @@ This software calculates the financial and life-safety risk for commercial build
 ### Features
 * SaaS model 
 * Server-based computation engine
-* Browser client
+* AngularJS browser client
 * parallel and scalable
 * json HTTP api
+* d3 graphs
 
 This project brings leading earthquake engineering research to an educational and consulting setting through a simple and flexible user interface coupled to a server-based or local computation engine. A local mode is available.
  
